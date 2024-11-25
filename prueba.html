@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Canciones</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <h1>Buscar canciones de un artista</h1>
+    <form id="searchForm">
+        <input type="text" id="artistName" placeholder="Nombre del cantante" required>
+        <button type="submit">Buscar</button>
+    </form>
+    <ul id="songList"></ul>
+
+    <script>
+        const clientId = '22764d228fb54fdfa21eb2a61587689a';
+        const redirectUri = 'http://127.0.0.1:5504/prueba.html';
+        const scopes = 'user-read-private';
+        let accessToken = '';
+
+        // Redirigir al usuario para autenticarse si no hay token
+        function authenticateWithSpotify() {
+            const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+            window.location.href = authUrl;
+        }
+
+        // Procesar el token de acceso
+        function processAccessToken() {
+            const hash = window.location.hash;
+            const token = hash
+                .substring(1)
+                .split('&')
+                .find(elem => elem.startsWith('access_token'))
+                ?.split('=')[1];
+
+            if (token) {
+                accessToken = token;
+                window.history.replaceState({}, document.title, window.location.pathname); // Limpiar el hash
+            } else {
+                authenticateWithSpotify();
+            }
+        }
+
+        // Llamar a la API de Spotify para buscar canciones de un artista
+        async function searchArtist(artistName) {
+            const artistUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`
+            };
+
+            try {
+                const artistResponse = await fetch(artistUrl, { headers });
+                const artistData = await artistResponse.json();
+                if (artistData.artists.items.length > 0) {
+                    const artistId = artistData.artists.items[0].id;
+                    await getTopTracks(artistId);
+                } else {
+                    alert('Artista no encontrado');
+                }
+            } catch (error) {
+                console.error('Error al buscar el artista:', error);
+                alert('Hubo un error al buscar el artista.');
+            }
+        }
+
+        // Obtener las canciones más populares del artista
+        async function getTopTracks(artistId) {
+            const topTracksUrl = `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`
+            };
+
+            try {
+                const tracksResponse = await fetch(topTracksUrl, { headers });
+                const tracksData = await tracksResponse.json();
+                displayTracks(tracksData.tracks);
+            } catch (error) {
+                console.error('Error al obtener las canciones:', error);
+                alert('Hubo un error al obtener las canciones.');
+            }
+        }
+
+        // Mostrar las canciones en el DOM
+        function displayTracks(tracks) {
+            const songList = document.getElementById('songList');
+            songList.innerHTML = ''; // Limpiar resultados anteriores
+            tracks.forEach(track => {
+                const listItem = document.createElement('li');
+                listItem.textContent = track.name;
+                songList.appendChild(listItem);
+            });
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('searchForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const artistName = document.getElementById('artistName').value;
+            searchArtist(artistName);
+        });
+
+        // Procesar el token de acceso al cargar la página
+        processAccessToken();
+    </script>
+</body>
+
+
+</html>
