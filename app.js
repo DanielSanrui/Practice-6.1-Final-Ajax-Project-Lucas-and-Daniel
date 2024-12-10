@@ -11,7 +11,12 @@ document.querySelector("#search").addEventListener("keydown", function (event) {
 document.querySelector("#buttonSearch").addEventListener("click", Search);
 
 function Search() {
+  document.querySelector("#favorites").style.display = "none";
+
+  document.querySelector("#results").style.display = "flex";
+
   document.querySelectorAll("#results > div").forEach((div) => div.remove());
+
   const music = document.querySelector("#search").value;
 
   const url = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${music}`;
@@ -49,11 +54,11 @@ function Search() {
           resultDiv.id = music.id;
           resultDiv.className = "result";
           resultDiv.innerHTML = `
-                        <img src="${music.artist.picture}" alt="Imagen del artista">
+                        <img src="${music.album.cover_big}" alt="Imagen del artista">
                         <h3 id="title${index}" class="title">${music.title}</h3>
                         <div class="autor">${music.artist.name}</div>
                         <div class="fav">
-                            <button onclick="addToFavorites(${index})">Add to favourites</button>
+                            <button onclick="addToFavorites(${index})">Add to Favorites</button>
                         </div>
                         <div id="content${music.id}" class="content"></div>
                     `;
@@ -77,6 +82,7 @@ function Search() {
     .catch((error) => console.error(error));
 }
 
+
 function addToFavorites(index) {
   const music = musics[index];
   if (!favorites.some((fav) => fav.id === music.id)) {
@@ -91,6 +97,23 @@ function removeFromFavorites(index) {
   localStorage.setItem("favorites", JSON.stringify(favorites));
   renderFavorites();
 }
+
+document.querySelector("#favorites").style.display = "none";
+
+
+document.querySelector("#buttonFav").addEventListener("click", function () {
+  const favoritesSection = document.querySelector("#favorites");
+  const resultsSection = document.querySelector("#results");
+
+  if (favoritesSection.style.display === "none") {
+    favoritesSection.style.display = "block";
+    resultsSection.style.display = "none";
+  } else {
+    favoritesSection.style.display = "none";
+    resultsSection.style.display = "flex";
+  }
+});
+
 
 function renderFavorites() {
   const favoriteResults = document.querySelector("#favoriteResults");
@@ -111,12 +134,12 @@ function renderFavorites() {
       const favoriteDiv = document.createElement("div");
       favoriteDiv.className = "favorite-song";
       favoriteDiv.innerHTML = `
-        <img src="${music.artist.picture}" alt="Imagen del artista">
+        <img src="${music.album.cover_big}" alt="Imagen del artista">
         <h3 class="title">${music.title}</h3>
         <div class="autor">${music.artist.name}</div>
         <audio src="${music.preview}" controls></audio>
         <div class="fav">
-          <button onclick="removeFromFavorites(${index})">Remove from favourites</button>
+          <button onclick="removeFromFavorites(${index})">Remove from Favorites</button>
         </div>
       `;
       favoriteResults.appendChild(favoriteDiv);
