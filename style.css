@@ -73,22 +73,20 @@ audio::-webkit-media-controls-seek-forward-button {
     padding: 5px;
 }
 
-
-
-
-
-
-
-
-
-body {
+html, body {
     margin: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     background: #000000;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
 }
 
+main {
+    flex: 1;
+}
 
 header {
     background-color: rgba(0, 0, 0, 0.8);
@@ -157,7 +155,7 @@ header {
 }
 
 .result:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .result .title {
@@ -184,7 +182,7 @@ header {
 }
 
 .result .fav button:hover {
-    background-color: rgba(0, 255, 128, 0.4);
+    background-color: rgb(3, 206, 104);
 }
 
 
@@ -195,6 +193,7 @@ header {
     flex-wrap: wrap;
     gap: 20px;
     margin-top: 40px;  
+    margin-bottom: 80px;
 }
 
 
@@ -213,6 +212,7 @@ header {
     box-shadow: 0 8px 25px rgba(0, 255, 128, 0.4);
 }
 
+
 .favorite-song img {
     max-width: 100%;
     border-radius: 15px;
@@ -220,7 +220,7 @@ header {
 }
 
 .favorite-song:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .favorite-song .title {
@@ -228,7 +228,10 @@ header {
     font-weight: bold;
     margin-top: 10px;
 }
-
+#favorites {
+    display: none;
+  }
+  
 .favorite-song .autor {
     font-size: 14px;
     color: #ccc;
@@ -249,9 +252,5 @@ header {
 .favorite-song .fav button:hover {
     background-color: rgba(255, 0, 0, 0.6);  
 }
-
-
-
-
 
 
