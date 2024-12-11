@@ -212,3 +212,6 @@ The work was divided equally among team members:
 - `Logic` (JavaScript): Both members contributed to implementing the functionality and API integration.
 
 Each team member contributed 50% to the practice and the documentation.
+
+
+GitHub Repository: https://github.com/DanielSanrui/Practice-6.1-Final-Ajax-Project-Lucas-and-Daniel.git
