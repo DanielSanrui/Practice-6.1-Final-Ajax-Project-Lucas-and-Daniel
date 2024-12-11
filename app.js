@@ -38,7 +38,7 @@ function Search() {
       if (!results || results.length === 0) {
         const noResults = document.createElement("div");
         noResults.className = "noResults";
-        noResults.textContent = "Ningún resultado encontrado";
+        noResults.textContent = "No results found.";
         document.querySelector("#results").appendChild(noResults);
       } else {
         const setResult = new Set();
@@ -54,7 +54,7 @@ function Search() {
           resultDiv.id = music.id;
           resultDiv.className = "result";
           resultDiv.innerHTML = `
-                        <img src="${music.album.cover_big}" alt="Imagen del artista">
+                        <img src="${music.album.cover_big}" alt="Artist image">
                         <h3 id="title${index}" class="title">${music.title}</h3>
                         <div class="autor">${music.artist.name}</div>
                         <div class="fav">
@@ -134,7 +134,7 @@ function renderFavorites() {
       const favoriteDiv = document.createElement("div");
       favoriteDiv.className = "favorite-song";
       favoriteDiv.innerHTML = `
-        <img src="${music.album.cover_big}" alt="Imagen del artista">
+        <img src="${music.album.cover_big}" alt="Artist image">
         <h3 class="title">${music.title}</h3>
         <div class="autor">${music.artist.name}</div>
         <audio src="${music.preview}" controls></audio>
